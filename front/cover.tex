@@ -19,13 +19,13 @@
   %=========
   % ctitleone={局部多孔质气体静压},%本科生封面使用
   % ctitletwo={轴承关键技术的研究},%本科生封面使用
-  ctitlecover={数据挖掘在音乐流行趋势预测中的应用研究},%放在封面中使用，自由断行
-  ctitle={数据挖掘在音乐流行趋势预测中的应用研究},%放在原创性声明中使用
-  csubtitle={一条副标题}, %一般情况没有，可以注释掉
+  ctitlecover={基于群体智能的基因表达数据双聚类的研究},%放在封面中使用，自由断行
+  ctitle={基于群体智能的基因表达数据双聚类的研究},%放在原创性声明中使用
+  %csubtitle={一条副标题}, %一般情况没有，可以注释掉
   cxueke={工学},
-  csubject={计算机系统结构},
+  csubject={计算机软件与理论},
   caffil={计算机与信息科学学院},
-  cauthor={秦林林},
+  cauthor={凡振豪},
   csupervisor={欧灵副教授},
   % cassosupervisor={某某某教授}, % 副指导老师
   % ccosupervisor={某某某教授}, % 联合指导老师
@@ -40,56 +40,30 @@
   %=========
   % 英文信息
   %=========
-  etitle={Application Research of Data Mining in Music Trend Forecasting},
+  etitle={Research on  biclustering of gene expression data based on swarm intelligence},
   esubtitle={This is the sub title},
   exueke={Engineering},
   esubject={Computer Architecture},
   eaffil={\emultiline[t]{College of Computer and Information Science}},
-  eauthor={QIN Linlin},
+  eauthor={FAN Zhenhao},
   esupervisor={OU Ling},
   % eassosupervisor={XXX},
   % 日期自动生成，若需指定按如下方式修改：
-  edate={December, 2017},
+  % edate={December, 2017},
   estudenttype={Master of Engineer},
   %
   % 关键词用“英文逗号”分割
-  ckeywords={音乐流行趋势;随机森林;长短期记忆网络;差分自回归移动平均模型},
-  ekeywords={Music trend, Random forest, LSTM, Differential autoregressive moving average model},
+  ckeywords={群智能算法;基因表达数据;双聚类;多目标优化},
+  ekeywords={Swarm intelligence Algorithm，Gene Expression Data, Biclustering, Multiple-optimistic},
 }
 
 \begin{cabstract}
+  高通量基因微阵列技术的出现, 产生了大量的基因表达数据。这些数据在追踪生物过程,基因规则发现以及病理分析中有着至关重要的作用。基因表达数据的双聚类是指, 找出在某些条件子集下包含一致表达波动的基因子集。双聚类可以看作是一种优化问题。针对表达数据高维度, 高冗余的特点, 许多群智能算法被用于双聚类中来。本文对粒子群算法、量子粒子群算法, 萤火虫算法以及布谷鸟算法在四个数据集上进行了比较研究。实验结果表明了量子粒子群算法与布谷鸟算法具有更好的全局寻优能力。最后基于基因本体工程, 对双聚类结果给出了生物学解释。
 
-  对音乐流行趋势进行精准的预测，既能增强用户体验、增加平台收益，也能提高歌手的知名度，挖掘出明日前途无限的歌手，进一步提升音乐平台的影响力和经济收益。因此，利用历史数据对音乐流行趋势进行精准预测，对歌手、音乐爱好者以及网络音乐平台都具有十分重要的意义。
 
-  互联网音乐数据具有多样复杂、维度较高、数据量大、变化快、实时性强、时间序列明显的特点，现有的音乐流行趋势模型和传统的统计模型往往难于有效地分析歌手、用户、歌曲（下载量、播放量、收藏量）等大量数据的复杂关系，对音乐数据进行深层次的挖掘效果也不够理想。近年来，诸多预测问题采用了从回归预测和时间序列预测两个角度来展开研究，其中，基于随机森林算法的回归预测模型、时间序列模型在很多领域取得了比较理想的预测效果。
-
-  为此，本文构建了基于随机森林算法的回归预测模型、构建了爆增型歌曲衰减模型与随机森林算法预测模型的组合预测模型、基于长短期记忆网络的时间序列预测模型以及差分自回归移动平均的时间序列模型来预测音乐流行趋势，通过实验验证和评估了这些模型的预测效果，达到了预测目标。本文的主要工作包括以下几个方面：
-
-  \begin{itemize}
-    \item[(1)] {构建了一种基于随机森林算法预测音乐流行趋势的模型，针对互联网音乐数据多维度、复杂的特征，随机森林算法性能表现良好，它能很好处理高维度的数据，训练速度快，抗干扰能力强。该模型将用户偏爱的特征，听歌时间习惯等多维度数据进行One-Hot编码，然后再将得到的特征通过K-means对用户分别进行聚类。同时，结合音乐数据的独特性，针对歌曲播放量爆增后有一个衰减的过程，提出了一个爆增型歌曲衰减模型，将它与基于随机森林算法的回归预测模型结合，使得音乐流行趋势预测能力得到了大幅提高。}
-    \item[(2)] {构建了一种基于长短期记忆网络时间序列预测音乐流行趋势模型，针对互联网音乐数据具有时间序列明显的特点，长短期记忆网络适用于处理时间序列预测问题，并且具有记住长时间段信息的优势，是解决长期记忆问题而明确设计的最佳模型之一。论文通过实验测试了该模型的预测能力。}
-    \item[(3)] {构建了一种基于差分自回归移动平均法时间序列预测音乐流行趋势模型，差分自回归移动平均模型明确地迎合了时间序列数据中的一套标准结构，该模型具有较为简单，只需要内生变量而不需要借助其他外生变量、适用范围广、预测误差小的优势。通过实验测试了该模型的预测效果，并且与长短期记忆网络时间序列预测模型进行了对比分析。}
-  \end{itemize}
-
-  实验利用了阿里音乐数据集对本文的四个音乐流行趋势预测模型进行了测试。本文定义了以评估指标F为核心的预测评价标准，纵向对比分析了四个模型的预测效果。
-
-  实验结果表明，基于随机森林算法的音乐流行趋势预测模型对比两个时间序列预测模型的评估指标值F值要高，预测性能更好；相比于一般的随机森林算法预测模型，爆增型歌曲衰减算法与随机森林算法相结合的预测模型，预测能力的评估指标值F值增加，整体的预测效果更佳，预测能力明显提升。总之，本文进行的音乐流行趋势预测研究是有效的，达到了预测目的。
 \end{cabstract}
 
 \begin{eabstract}
-   Accurate prediction of trends of music can enhance user experience, promote up the popularity of artists and coming artists, and increase profitability of a music platform. The prediction of such trends from historical data is of great significance for singers, music lovers and online music platforms. 
+  The advent of high-throughput gene microarray technology has generated a large amount of gene expression data. These data play a vital role in tracking biological processes, discovering genetic rules, and analyzing pathology. Biclustering of gene expression data refers to finding a subset of genes that contain consistent expression fluctuations under certain conditional subsets. Biclustering can be considered as an optimization problem. In view of the high dimensionality and high redundancy of expression data, many swarm intelligence algorithms are used in biclustering. In this paper, particle swarm algorithm, quantum particle swarm algorithm, firefly algorithm and cuckoo algorithm are compared and researched on four data sets. The experimental results show that the quantum particle swarm algorithm and cuckoo algorithm have better global optimization capabilities. Finally, based on the gene ontology engineering, a biological explanation is given for the results of the biclustering.
 
-   Data from online music platforms typically has high dimensionality, great complexity, and obvious characteristics of time series. Existing music trend models and traditional statistical models often struggle to effectively analyze the intricate relationship between artists, users, songs (downloads, playbacks, collections), and mine music data in depth. The shortcomings of these models motivates the research in this paper. In recent years, many forecasting problems have been studied from the perspective of regression forecasting and time series forecasting. Among them, regression forecasting model based on Random Forest and time series forecasting techniques have achieved promising results in many fields.
-
-   To predict trends in music popularity, this paper constructs four models. The first is a regression prediction model based on the Random Forest algorithm, the second combination model of a Explosive Song Attenuation Model (ESAM) and the regression prediction model based on the Random Forest algorithm, the third a time series prediction model based on Long Short-Term Memory network and fourth an Auto-Regressive Integrated Moving Average time series model. The prediction effect of these models are then evaluated through experiments. The main work of this paper includes the following:
-   \begin{itemize}
-     \item[(1)] {A model based on Random Forest algorithm is constructed to predict the trend in music popularity. Random forest techniques excel at handling the multi-dimensional characteristics of Internet music data and additionally it has fast training speed and strong anti-jamming ability. The process uses One-Hot encoding of user preferences, listening time habits and other multi-dimensional data, and then cluster several types of features after One-Hot encoding through K-Means. At the same time, aiming at the attenuation process of the special song which has a large number of playbacks recently, a Explosive Song Attenuation Model (ESAM) is proposed. The model, combining with the regression prediction model based on random forest algorithm and ESAM , makes a great improvement compared with original forecasting model.}
-     \item[(2)] {A music trend prediction model based on Long Short-Term Memory(LSTM) network time series is constructed and evaluated. In view of the obvious time series characteristics of online music data, the LSTM network is suitable for time series modelling and prediction and it has the advantage of remembering long-term information. It is specifically designed to solve the problem of long-term memory. The prediction ability of the model is also tested through experiments.}
-     \item[(3)] {Constructing an Auto-Regressive Integrated Moving Average time series prediction model of music trends. The Auto-Regressive Integrated Moving Average model helps reveal insights in most time series data. The model has the advantages of simplicity, only requiring endogenous variables, wide application range and small prediction error. The prediction effect of the model is also tested by experiments, and the experimental results are compared with the LSTM time series prediction model.}
-    
-   \end{itemize}
-
-   The core evaluation index F has been defined. The four popular trend prediction models in this paper are tested by using the Internet music data of the Ali. The evaluation index F values of the four models are compared vertically to analyze the quality of the prediction.
-
-   The experimental results show that the music trend prediction model based on Random Forest algorithm has a higher F value and better prediction performance than the two time series models. Combining the explosive songs attenuation model in the viewing effects of music with the random forest increases the F value and the overall predictive ability. The experimental results demonstrate the paper is effective in predicting the trends of music and achieves the goal of prediction.
 \end{eabstract}
