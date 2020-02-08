@@ -6,7 +6,7 @@
 
   基因表达数据极其庞大，以及需要专业的生物知识，导致很多跨领域的研究者很难涉足。为了打破这种学科壁垒，科学家们提出了关于描述和存储基因表达数据的标准，并在标准之上建立了基因表达数据库。最广泛的数据库为GEO（Gene Expression Omnibus），由美国国家生物技术信息中心于2000年开发。该数据库提供了共享基因表达数据的平台，并且有专业的人员进行审核。公共数据库的出现，极大促进了生物信息学的发展。
 
-  基因表达数据一般以一个二维矩阵\textit{E}表示，一行代表一个基因，一列代表一个实验条件。实验条件包括不同时期，不同组织，不同个体，不同外部环境等等。矩阵\textit{E}中的每个元素$e_{ij} $表示基因$g_i$在实验条件$c_j$下的表达水平值，其生物含义是该基因在此条件下，细胞中mRNA的含量。
+  基因表达数据一般以一个二维矩阵\textit{E}表示，一行代表一个基因，一列代表一个实验条件。实验条件包括不同时期，不同组织，不同个体，不同外部环境等等。矩阵\textit{E}中的每个元素$e_{ij} $表示基因$g_i$在实验条件$c_j$下的表达水平值，其生物含义是该基因在此条件下，细胞中mRNA的含量。矩阵\textit{E}中的每一行被称为基因在该基因表达数据上的全局表达模式（Expression Pattern）。矩阵\textit{E}中的每一列被称为条件在该基因表达数据上的全局表达描述（Expression Profile）。
 
 \section{双聚类的相关概念}
 
@@ -22,31 +22,33 @@
   \subsection{双聚类的类型}
     给定一个二维矩阵$A(I,J)$，$a_{ij}$为其中第$i$行第$j$列的值，$\alpha_i$是一个与行有关而与列无关的变量，$\beta_j$是一个与列有关而与行无关的变量，$0\le h,r,t,d \le |I|$或$0\le h,r,t,d \le |J|$。Madeira 和 Oliveira提出，在双聚类中主要有以下四种结构：
     \begin{enumerate}
-        \item[1.] 具有相同常量值的双聚类，如图\ref{bic61}所示，公式如下。
+        \item[1.] 具有相同常量值的双聚类。该类型的双聚类所有的元素为同一个常量，如图\ref{bic61}所示，公式如下。
         \begin{equation}
          a_{ij}=\mu
         \end{equation}
 
-        \item[2.] 列或行具有相同常量值的双聚类，如图\ref{bic62}和\ref{bic63}所示，公式如下。 
-        \begin{equation}
-        (a_{ij}=\mu+\alpha_i \mbox{或} a_{ij}=\mu *\alpha_i)  
-        \mbox{且}
-        (a_{ij}=\mu+\beta_j \mbox{或} a_{ij}=\mu *\beta_j)
+        \item[2.] 列或行具有相同常量值的双聚类，满足公式\ref{equ:hang}的双聚类属于行常量值双聚类，如图\ref{bic62}所示。满足公式\ref{equ:lie}的双聚类属于列常量值双聚类，如图\ref{bic63}所示。
+        \begin{equation}\label{equ:hang}
+        a_{ij}=\mu+\alpha_i \mbox{或} a_{ij}=\mu *\alpha_i 
+        \end{equation}
+        \begin{equation}\label{equ:lie}
+        a_{ij}=\mu+\beta_j  \mbox{或} a_{ij}=\mu *\beta_j
         \end{equation}
         
-        \item[3.] 具有连贯值的双聚类，如图\ref{bic64}和\ref{bic65}所示，公式如下。
-        \begin{equation}
-        a_{ij}=\mu+\alpha_i+\beta_j \mbox{或} a_{ij}=\mu *\alpha_i*\beta_j
-        \end{equation} 
+        \item[3.] 数值一致的双聚类，如图\ref{bic64}和\ref{bic65}所示，满足的公式如下。
+        \begin{align}
+        a_{ij}=\mu+\alpha_i+\beta_j \label{equ:jiafa}\\
+        a_{ij}=\mu *\alpha_i*\beta_j\label{equ:chengfa}
+        \end{align} 
 
         \item[4.] 具有连贯演变的双聚类，如图\ref{bic66}所示，公式如下。
-        \begin{equation}
-        a_{ih}\le a_{ir}\le a_{it}\le a_{id} \mbox{或} a_{hj}\le a_{rj}\le a_{tj}\le  a_{dj} 
-        \end{equation}
+        \begin{align}
+        a_{ih}\le a_{ir}\le a_{it}\le a_{id} \\
+        a_{hj}\le a_{rj}\le a_{tj}\le  a_{dj} 
+        \end{align}
     \end{enumerate}
-    则双聚类可以根据相对应的的结构分类。根据要解决问题的特定属性，需要考虑不同结构的双聚类。
 
-  \begin{figure}[!h]
+  \begin{figure}[htbp]
   \setlength{\subfigcapskip}{-1bp}
   \centering
   \begin{minipage}{.7\textwidth}
@@ -77,14 +79,14 @@
   \end{figure}
 
   \subsection{双聚类的结构}
-  双聚类的结构是指，通过算法找到的双聚类之间在原始矩阵时间的相对位置。根据结构，大体可以分为８类，如下图所示：
+  双聚类的结构是指，通过算法找到的双聚类之间在原始矩阵时间的相对位置。根据结构，大体可以分为８类:
   \begin{figure}[!h]
   \setlength{\subfigcapskip}{-1bp}
   \centering
   \begin{minipage}{.8\textwidth}
   \centering
   \subfigure{\label{bic81}}\addtocounter{subfigure}{-2}
-  \subfigure{\subfigure[单一双聚类结构]{\includegraphics[width=0.2\textwidth]{struct1}}}
+  \subfigure{\subfigure[单一结构]{\includegraphics[width=0.2\textwidth]{struct1}}}
   \hspace{.2em}
   \subfigure{\label{bic82}}\addtocounter{subfigure}{-2}
   \subfigure{\subfigure[对角结构]{\includegraphics[width=0.2\textwidth]{struct2}}}
@@ -113,19 +115,124 @@
   \end{minipage}
   \vspace{0.2em}
   \caption{双聚类的结构}
+  \label{fig:bic-struct}
   \end{figure}
+  \begin{enumerate}
+    \item[(1)] 单一结构。指基因表达数据中只存在一个双聚类，且基因和条件可以不属于该双聚类，如图\ref{bic81}所示。
+    \item[(2)] 对角结构。指任意两个双聚类之间互不共享行和列，且任一行或列只能属于其中一个双聚类，如图\ref{bic82}所示。这类的双聚类可以通过交换位置，最后呈对角线形状。
+    \item[(3)] 棋盘结构，指通过传统的聚类方法分别对行和列进行聚类，然后组合得到的双聚类，如图\ref{bic83}所示。
+    \item[(4)] 行互斥结构。指双聚类之间不存在共享的行，可以看作有对角线结构放松对行的限制所得，如图\ref{bic84}所示。
+    \item[(5)] 列互斥结构。与行互斥相似，指双聚类之间不存在共享的列，如图\ref{bic85}所示。
+    \item[(6)] 非互斥且非重叠结构。之允许双聚类之间存在相同的行或列，但不能存在重叠和包含关系，如图\ref{bic86}所示。
+    \item[(7)] 嵌套重叠结构。指双聚类之间可以存在包含关系，但不能出现重叠关系，如图\ref{bic87}所示。
+    \item[(8)] 任意重叠结构。指双聚类之间即可以存在包含关系，也可以存在重叠关系，如图\ref{bic88}所示。
+  \end{enumerate}
 
-% \section{双聚类算法的分类}
-
-%   \subsection{基于质量评价指标的双聚类算法}
-
-%   \subsection{基于模型的双聚类算法}
+  传统的聚类只能找到像图\ref{bic81}所示的单一结构，这对于基因表达数据的挖掘是远远不够的。嵌套和重叠的结构要比非嵌套和非重叠的结构复杂，需要更复杂的算法来找到它们。
 
   
-\section{双聚类的验证指标}
-  \subsection{质量验证指标}
+\section{双聚类的评价指标}
+  \subsection{质量评价指标}
+  由于在基因表达数据进行双聚类分析是NP难问题，目前大部分的算法都是基于优化策略的。为了评价双聚类的质量和知道优化的方向，需要有效的评价指标。指标是否科学可靠直接会体现到双聚类结果上。本节对目前常用的评价指标进行一个总结。
+  
+  方便起见，先引入一些数学定义。给定一个大小为$n\times m$的基因表达数据$E(X,Y)$，以及一个大小为$k\times l$的双聚类$B(I,J)$，$b_{Ij}$为$B$中第$j$列的平均值，$b_{iJ}$为$B$中第$i$行的平均值，$b_{IJ}$为双聚类整体的平均值，$Vol_B$表示双聚类的体积，公式定义如下:
+  \begin{align}
+    b_{iJ} &= \sum_{j\in J}\frac{b_{ij}}{|J|} \\
+    b_{Ij} &= \sum_{i\in I}\frac{b_{ij}}{|I|} \\
+    b_{IJ} &= \sum_{i\in I,j\in I}\frac{ b_{ij} }{|I| \times |J|}\\
+    Vol_B &= |I| \times |J|
+  \end{align}
+  \begin{enumerate}
+    \item[(1)] 方差。用$Var(B)$表示双聚类$B(I,J)$的方差，该指标代表了该双聚类的变化幅度，越大则双聚类中的值越不相同，定义如下：
+    \begin{equation}
+      Var(B) = \sum_{i\in I,j\in I}\frac{(b_{ij}-b_{IJ})^2}{Vol_B}
+    \end{equation}
 
-  \subsection{生物验证指标}
+    \item[(2)] 均方残差。该指标首先在CC算法中提出，并被广泛地应用在基因表达矩阵的分析中。数学定义如公式\ref{equ:msr}所示。该指标适合寻找像式\ref{equ:jiafa}这样的加法模型双聚类，且值越小越符合该模型。
+    \begin{equation}\label{equ:msr}
+      MSR(B) = \frac{1}{Vol_B}\sum_{i=1}^k\sum_{j=1}^l(b_{ij}-b_{iJ}-b_{Ij}+b_{IJ})^2
+    \end{equation}
+
+    \item[(3)] 扩展均方残差。因为$MSR(B)$只能发现加法模型，Mukhopadhyay 等提出了扩展均方残差（Scaling Mean Squared Residue，SMSR）。该指标适合寻找如\ref{equ:chengfa}这类的乘法模型双聚类，且值越小越符合该模型。双聚类$B(I,J)$的SMSR(B)定义如下：
+    \begin{equation}\label{equ:smsr}
+      SMSR(B) = \frac{1}{Vol_B}\sum_{i=1}^k\sum_{j=1}^l(\frac{b_{iJ}\times b_{Ij}-b_{ij}\times b_{IJ}}{b_{iJ}\times b_{Ij}})^2
+    \end{equation}
+
+    \item[(4)] 相关指数。该指标用来寻找列值常量类型的双聚类，定义如下：
+    \begin{equation}
+      RI(B) = \sum_{j=1}^l R_{Ij}/l = \sum_{j=1}(1 - \frac{\sigma_{Ij}^2}{\sigma_j^2})/l
+    \end{equation}
+    \hspace{2em} 其中，$R_{Ij}$为双聚类中第$j$列的相关指数，$\sigma_{Ij}^2$是双聚类中第$j$列所有元素的局部方差,$\sigma_{j}^2$是基因表达数据第$j$列所有元素的全局方差。该指标越大则越符合列值常量类型。类似的，稍加改造则可以寻找行值常量类型的双聚类。
+
+    \item[(5)] 最大标准化区域。该指标由Giraldez 等提出，并用于寻找趋势一致的双聚类。计算过程：首先要对双聚类$B(I,J)$进行标准化，得到$\hat{B}(I,J)$，计算公式为：
+    \begin{equation}
+      \hat{b}_{ij} = \frac{b_{ij}-b_{iJ}}{\sigma_i}
+    \end{equation}
+    \hspace{2em} 其中，$b_{iJ}$和$\sigma_i$为双聚类$B$中第$i$行元素的平均值和标准差。根据$\hat{B}(I,J)$，双聚类$B(I,J)$的最大标准化区域的定义如下：
+    \begin{equation}
+      MSA(B) = \sum_{j=1}^l \mid \frac{M_j-m_j-M_{j+1}+m_{j+1}}{2}\mid
+    \end{equation}
+    \hspace{2em} 其中，$M_j=max_{i\in [i,k]}\hat{b}_{ij}$，$m_j=min_{i\in [i,k]}\hat{b}_{ij}$。当双聚类中基因表达模型完全一致时，$MSA(B)=0$。
+
+    \item[(6)] 覆盖率。该指标是双聚类集合的多样性指标，因为大多数算法找到的双聚类都不止一个，如果双聚类过度重合则意义不大。我们总是希望找到互相重叠小且能覆盖到更多的基因表达数据的双聚类集合。 假设双聚类集合$\Pi＝\{B_1,B_2,...,B_r\}$，$\phi_k(E)$为判断$E(X,Y)$中每个元素$e_{ij}$是否在双聚类$B_k$的函数。定义公式如下：
+    \begin{equation}
+    \phi_k(a_{ij})  = \left\{
+      \begin{aligned}
+       1 & = & if a_{ij} \in B_k \\
+       0 & = & otherwise 
+      \end{aligned}
+    \right.
+    \end{equation}
+  \end{enumerate}
+  \hspace{2em}则双聚类集合$\Pi$的覆盖率$covRate(\Pi)$定义如下：
+  \begin{equation}
+   covRate(\Pi) = \frac{\sum_{i=1}^k\sum_{j=1}^l\cup_{k=1}^r\phi_k(a_i)}{n \times m} 
+  \end{equation}
+  \hspace{2em}从定义可以看出，覆盖率的含义是集合$\Pi$中$r$个子矩阵并集所占基因表达数据$E$的比例。
+
+  \subsection{生物评价指标}
+  为了评价通过双聚类获得基因集合的生物意义，需要对其进行基因解释。生物技术的发展积累了很多关于基因的描述，这些信息可以为我们提供参考。目前，最好的基因注释数据库当属KEGG数据库和GO数据库。前者主要用来做旁路分析，所谓旁路分析，就是获得基因之间的调控关系，后者主要用来做富集分析，对基因功能进行注释。目前对双聚类结果的生物验证主要还是GO的富集分析。
+
+  GO数据库中保存了各种物种的基因的注释信息，包括基因的功能和之间的关系。GO将基因的功能分为分子功能（Molecular Funciotn，MF），细胞组成（Cell Compose，CC）和生物过程（Biological Process，BP）。GO将一项功能称为一个GO项（term），并通过一个有向无环图表示项与项之间的关系。如果两个GO项之间有连线，则表示之间存在联系。如果双聚类中关于某一GO项的基因个数大于该项随机概率出现的次数，则称该双聚类的基因集合富集在这一GO项，并用通过统计学方法，得到统计值P-value来表示富集的程度。P-value越小，则富集程度越大，一般只关注P-value小于0.01的GO项。  
+  \begin{enumerate}
+    \item[(1)] 显著富集双聚类的比例。对于双聚类集合$\Pi＝\{B_1,B_2,...,B_r\}$，假设其中存在$r_{sig} \le r$个双聚类存在富集。显著富集双聚类的比例（Proportion of the biclustersSignificantly Enriched, proSigEnriched）定义如下：
+    \begin{equation}
+      proSigEnriched = \frac{r_{sig}}{r} \times 100\%
+    \end{equation}
+
+    \item[(2)] 带权重的富集分数。$proSigEnriched$只是在双聚类层面的验证指标，不仅没有精确到功能项而且对于基因集合很大的双聚类很难区分。所以，带权重的富集分数（Weight Enrichment Score， WEScore）被引入进来，定义如下：
+    \begin{equation}\label{equ:wescore}
+      WEScore = \sum_{i=1}^Tx_is_i/k
+    \end{equation}
+    \hspace{2em}其中，$T$是双聚类$B$经过GO分析后得到的GO项的个数，$x_i$是对应第$i$个GO项的基因个数，$s_i$是对应GO项经过负对数变换后的P值。$WEScore(B)$越大则该双聚类生物意义越大。
+
+    \item[(3)] 平均P值。与$WEScore$类似，平均P值（Mean of P Values, meanPValue）的定义如下：
+    \begin{equation}\label{equ:meanP}
+      meanPValue = \sum_{i=1}^Ts_i/T
+    \end{equation}
+    \hspace{2em}其中，$T$与$s_i$与\ref{equ:wescore}含义一样，且$meanPValue(B)$越大则该双聚类生物意义越大。
+
+    \item[(4)] 基因与GO项的比值。由于一个双聚类一般会在很多个GO项出现富集，如果GO项的个数越少，则说明双聚类中的基因之间越相关。因此，引入了基因与GO项的比值（Ratio of number of gene to number of significant terms, rateGeneTerm），定义如下：
+    \begin{equation}
+     rateGeneTerm(B) = k / T 
+    \end{equation}
+    \hspace{2em}其中，$k$是双聚类中基因的个数，$T$与\ref{equ:wescore}中含义一致。
+  \end{enumerate}
+
+\section{双聚类算法的分类}
+  \subsection{基于质量评价的双聚类算法}
+  因为在基因表达数据上进行双聚类分析是NP难问题，所以无法通过穷举的方式来搜索双聚类。上一节给出了一些质量评价指标，大部分算法都是使用不同的策略，找到在一种或多种评价指标最优的双聚类。根据搜索策略的不同，可以将算法分为以下几类。
+  \begin{enumerate}
+    \item[(1)] 基于贪婪迭代搜索策略。这类算法，一般是从一个初始的双聚类出发，然后根据质量指标迭代地添加或移除基因或条件节点。该类算法的有点是速度快，但通常质量欠佳。MSB（Maximum Similarity Biclusters）算法以及CC算法就其中的典型算法。
+
+    \item[(2)] 基于随机贪婪搜索。如前一种不同的是，此类算法在迭代过程中并不只考虑最优的操作，而是一定概率采取次优的操作，保证了搜索的多样性。FLOC算法就属于此类。
+    
+    \item[(3)] 基于聚类算法。该类算法的特点是，先使用传统的聚类方法分别对行和列进行聚类，并将其组合起来，然后在组合得到的双聚类中挑取质量评价较好的结果。例如，PSB算法先使用IPC聚类算法在行和列两个方向聚类分析，然后使用MSR(B)筛选组合后得到的双聚类。
+    
+    \item[(4)] 基于元启发式算法。元启发算法的特点是模拟大自然中生物的高效的搜索行为，例如例子群算法，蚁群算法。这类算法通过使用双聚类的质量评价指标组合成适应度函数，从而找到质量评价指标高的双聚类。
+  \end{enumerate}
+  \subsection{基于模型的双聚类算法}
+  在有些双聚类算法中，并没有使用质量评价指标，该类算法被成为基于模型的双聚类算法。如基于图论的SAMBA算法，基于概率模型的Plaid算法，基于矩阵论的ISA算法，基于排序的OPSM算法，基于关联规则挖掘的BiModule算法。
 
 \section{群智能算法}
 
@@ -198,3 +305,4 @@
   \end{enumerate}
 
 \section{本章小结}
+生物信息学中，通过双聚类分析对基因表达数据进行挖掘，希望找到在对应条件下紧密相关的基因集合。本章主要对基因表达数据上的双聚类的相关知识进行了阐述，先是介绍了基因表达数据的重要以及特点；然后对双聚类的定义、类型和结构进行了描述；接下来对常用的质量评价指标以及生物评价指标进行了简要介绍，以及把双聚类算法分为了基于质量评价指标的和基于模型的两种；最后简要说明了本文用到的几种群智能算法。
