@@ -1,4 +1,4 @@
 fan.*
 !fan.txt
 !fan.pdf
-body/*.aux
+*.aux
