@@ -17,7 +17,7 @@
     \subsection{适应值函数设计}
     优化算法需要知道优劣的评价标准，在群智能算法中一般称之为适应值。我们需要设计一个适应值函数，用来得到一个解的质量，从而在解与解之间以及算法之间进行比较。正如\ref{section:qualityEval}小节提到的，MSR是最主要也是最直观的质量评价指标，同时双聚类的体积也是衡量好坏的标准之一。一般来说，体积越大的双聚类MSR会相应的变大，而我们希望找到体积大但是MSR较小的双聚类。所以，需要在保持两者之间平衡的同时，能够引导双聚类算法找到更优的解。对于双聚类$B(I,J)$，其适应值为：
     \begin{align}
-      f(B) &= MSR(B) + \frac{\lambda}{GV(B)} +\frac{\mu}{CV(B)} + \frac{\omega}{Var(B)}\\
+      f(B) &= MSR(B) + \frac{\lambda}{GV(B)} +\frac{\mu}{CV(B)} \\
       GV(B) & = |I| \\
       CV(B) & = |J|
     \end{align}
@@ -51,7 +51,7 @@
         B = Best($P_{FA-CS}$) \\
         return B \\
         \end{algorithm}
-       \item[(3)] 嵌套执行CS-FA
+       \item[(3)] 嵌套执行CS-FA：该方案在每一次迭代都会执行CS操作和FA操作，并且采用竞标策略保留两次操作中最优的个体。
         \begin{algorithm}[htbp]
         \caption{CSFA混合方案}\label{alg:csfa}
         \KwIn{$n \times m$的基因表达矩阵E，弃巢比例p，种群大小N，光吸收系数$\gamma$，最大吸引度$\beta_0$，步长因子$\alpha$，最大迭代次数Iter，最大早熟次数maxEarlyStopCnt}
@@ -73,11 +73,46 @@
         \end{algorithm}
     \end{enumerate}
     \subsection{停止条件}
+    算法的停止条件是达到最大的迭代次数或者种群中最优双聚类的质量已经有一定的时间不再提升，后一种情况称为early stopping。通过EarlyStop函数来实现，当新的最优适应值想比较上一代的最优适应值几乎没有变化时，将earlyStopCnt加一，否则置零。
+    \begin{algorithm}[htbp]
+    \caption{EarlyStop函数}
+    \SetAlgoLined
+    \KwIn{earlyStopCnt, 新的最优适应值$f_{new}$，旧的最优适应值$f_{old}$}
+    \KwOut{新的earlyStopCnt}%
+        \uIf{ |$f_{new}$ - $f_{old}$| < $f_{new}/1000$}{earlyStopCnt++\;}
+        \Else{earlyStopCnt = 0}
+        return earlyStopCnt 
+    \end{algorithm}
 
-\section{实验结果及分析}
+\section{实验环境及基因表达数据}
+本节主要介绍实验所用到的软硬件环境和数据，后面章节的实验所用的环境和数据与本节相同，将不再赘述。
     \subsection{实验环境}
+    本文提出的CSFAB双聚类算法与其他用来比较的算法均是用Matlab语言实现，并运行在Matlab R2018b环境中。对于双聚类结果的生物验证，是用R语言的clusterProfiler包得到的。所有代码都运行在64位的Ubuntu 18.04操作系统上，CPU是intel i7-9700，内存大小为16G。
 
     \subsection{基因表达数据}
+    不同的双聚类算法采取不同的搜索策略，有不同的侧重。为了全面的评估本文所提出的算法，本文选择了四个数据量各不同的数据集，如表\ref{tab:data}所示。
+    \begin{table}[htbp]
+    \caption{本文所用的基因表达数据集的相关信息}\label{tab:data}
+    % \bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Table in agreement of the standard from graduate school}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{cccccc}
+    \toprule[1.5pt]
+    数据名缩写 & 数据全名 & 基因数量 &　条件数量 & $\lambda$& $\mu$ \\
+    \midrule[1pt]
+    Yeast Cell & Yeast cell cycle & 5847& 50 & 2.0E05 &  2.0E03\\
+    BCLL & B-cell chronic lymphocytic leukemia& 12815& 21 & 1.0E04 & 1.0E03\\
+    RatStrain & Rat multiple tissue in strain& 7751& 122 & 6.0E05 & 1.0E04\\
+    PBC & Primary breast cancer& 21225& 286 & 3.0E06 & 4.0E04\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+    \end{table}
+    这些基因表达数据集都是来自GEO数据库，编号分别为GDS2350，GSE2403，GSE952，GSE2034。$\lambda$和$\mu$均为经验值。本文使用python的GEOParse包和Pandas包在基因维度上对数据进行了Min-max Normalization，缩放到[0，1]区间并乘以100。计算公式如下。
+    \begin{equation}
+        x^{\prime} = \frac{x - min(x)}{max(x) - min(x)} \times 100
+    \end{equation}
+    其中，$x$为基因表达数据的某一行，也就是该基因在所有条件下的表达水平。
+
+\section{实验结果及分析}
 
     \subsection{混合方案比较}
 
