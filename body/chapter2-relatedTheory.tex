@@ -174,7 +174,13 @@
     \end{equation}
     \hspace{2em} 其中，$M_j=max_{i\in [i,k]}\hat{b}_{ij}$，$m_j=min_{i\in [i,k]}\hat{b}_{ij}$。当双聚类中基因表达模型完全一致时，$MSA(B)=0$。
 
-    \item[(6)] 覆盖率。该指标是双聚类集合的多样性指标，因为大多数算法找到的双聚类都不止一个，如果双聚类过度重合则意义不大。我们总是希望找到互相重叠小且能覆盖到更多的基因表达数据的双聚类集合。 假设双聚类集合$\Pi＝\{B_1,B_2,...,B_r\}$，$\phi_k(E)$为判断$E(X,Y)$中每个元素$e_{ij}$是否在双聚类$B_k$的函数。定义公式如下：
+    \item[(6)] HV-Score。一个双聚类$B(I, J)$的Hv−Score定义如下：
+    \begin{equation}
+     Hv(B) = \frac{\sum_{i=1}^k \sum_{j=1}^l(b_{ij}-b_{iJ}-b_{Ij}+b_{IJ})^2}{\sum_{i=1}^k \sum_{j=1}^l(b_{ij}-b_{iJ})^2}
+    \end{equation}
+    该指标是对MSR的改进，改善了MSR偏向找到常量类型双聚类的不足，由Bryan等提出。值越小则双聚类的质量越好。
+
+    \item[(7)] 覆盖率。该指标是双聚类集合的多样性指标，因为大多数算法找到的双聚类都不止一个，如果双聚类过度重合则意义不大。我们总是希望找到互相重叠小且能覆盖到更多的基因表达数据的双聚类集合。 假设双聚类集合$\Pi＝\{B_1,B_2,...,B_r\}$，$\phi_k(E)$为判断$E(X,Y)$中每个元素$e_{ij}$是否在双聚类$B_k$的函数。定义公式如下：
     \begin{equation}
     \phi_k(a_{ij})  = \left\{
       \begin{aligned}
@@ -202,21 +208,21 @@
 
     \item[(2)] 带权重的富集分数。$proSigEnriched$只是在双聚类层面的验证指标，不仅没有精确到功能项而且对于基因集合很大的双聚类很难区分。所以，带权重的富集分数（Weight Enrichment Score， WEScore）被引入进来，定义如下：
     \begin{equation}\label{equ:wescore}
-      WEScore = \sum_{i=1}^Tx_is_i/k
+      WEScore = \sum_{i=1}^t{x_i s_i}/k
     \end{equation}
-    \hspace{2em}其中，$T$是双聚类$B$经过GO分析后得到的GO项的个数，$x_i$是对应第$i$个GO项的基因个数，$s_i$是对应GO项经过负对数变换后的P值。$WEScore(B)$越大则该双聚类生物意义越大。
+    \hspace{2em}其中，$t$是双聚类$B$经过GO分析后得到的GO项的个数，$x_i$是对应第$i$个GO项的基因个数，$s_i$是对应GO项经过负对数变换后的P值，$k$是双聚类中基因的个数。$WEScore(B)$越大则该双聚类生物意义越大。
 
     \item[(3)] 平均P值。与$WEScore$类似，平均P值（Mean of P Values, meanPValue）的定义如下：
     \begin{equation}\label{equ:meanP}
-      meanPValue = \sum_{i=1}^Ts_i/T
+      meanPValue = \sum_{i=1}^ts_i/t
     \end{equation}
-    \hspace{2em}其中，$T$与$s_i$与\ref{equ:wescore}含义一样，且$meanPValue(B)$越大则该双聚类生物意义越大。
+    \hspace{2em}其中，$t$与$s_i$与公式\ref{equ:wescore}含义一样，且$meanPValue(B)$越大则该双聚类生物意义越大。
 
     \item[(4)] 基因与GO项的比值。由于一个双聚类一般会在很多个GO项出现富集，如果GO项的个数越少，则说明双聚类中的基因之间越相关。因此，引入了基因与GO项的比值（Ratio of number of gene to number of significant terms, rateGeneTerm），定义如下：
     \begin{equation}
-     rateGeneTerm(B) = k / T 
+     rateGeneTerm(B) = k / t 
     \end{equation}
-    \hspace{2em}其中，$k$是双聚类中基因的个数，$T$与\ref{equ:wescore}中含义一致。
+    \hspace{2em}其中，$k$和$t$与公式\ref{equ:wescore}中含义一致。
   \end{enumerate}
 
 \section{双聚类算法的分类}
