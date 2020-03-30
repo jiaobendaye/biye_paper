@@ -24,9 +24,9 @@
     其中，$GV(B)$，$CV(B)$分别是$B(I,J)$中基因和实验条件的容量。$\lambda,\mu$是针对量纲不同问题，$\lambda,\mu$越大则GV和CV对适应值的影响越大，其值视数据集的情况而定。
     
     \subsection{混合方案设计}\label{sec:three}
-    大致有两种策略将两个算法混合，顺序执行策略和嵌套策略。第一种策略是将一个算法的结果作为另一个算法的输入，特点是两个算法前后互不影响。Nepomuceno 等将SEBI的结果输入到SSB算法中，进一步提高双聚类的质量。第二种策略是将两个算法的揉合到一起，将某一个算法作为局部功能嵌入到另一个算法中，这时两种算法前后不是独立的。例如，Bryan 等将CC算法的局部搜索功能作为SAB算法的一步，以提高双聚类的容量。基于上述二种策略,可有如下三种方案:
+    大致有两种策略将两个算法混合，顺序执行策略和嵌套策略。第一种策略是将一个算法的结果作为另一个算法的输入，特点是两个算法前后互不影响。例如，Nepomuceno 等将SEBI的结果输入到SSB算法中，进一步提高双聚类的质量。第二种策略是将两个算法的揉合到一起，将某一个算法作为局部功能嵌入到另一个算法中，这时两种算法前后不是独立的。例如，Bryan 等将CC算法的局部搜索功能作为SAB算法的一步，以提高双聚类的容量。基于上述二种策略,可有如下三种方案:
     \begin{enumerate}
-       \item[(1)] 顺序执行CS-FA：这种方案可以看作将FAB算法的随机初始化替换成CSB算法，先使用CSB算法生成双聚类，然后使用FAB算法进一步提高双聚类的质量，如算法\ref{alg:cs-fa}所示。
+       \item[1.] 顺序执行CS-FA：这种方案可以看作将FAB算法的随机初始化替换成CSB算法，先使用CSB算法生成双聚类，然后使用FAB算法进一步提高双聚类的质量，如算法\ref{alg:cs-fa}所示。
         \begin{algorithm}[htbp]
         \caption{CS-FA混合方案} \label{alg:cs-fa}
         % \AlgoBiCaption{这是一个简短的算法中文图题}{This is the English caption of the algorithm}
@@ -39,7 +39,7 @@
         return B
         \end{algorithm}
 
-       \item[(2)] 顺序执行FA-CS：与第一种方案刚好相反，将CSB算法的随机初始化改为FAB算法，如算法\ref{alg:fa-cs}所示。
+       \item[2.] 顺序执行FA-CS：与第一种方案刚好相反，将CSB算法的随机初始化改为FAB算法，如算法\ref{alg:fa-cs}所示。
         \begin{algorithm}[htbp]
         \caption{FA-CS混合方案}\label{alg:fa-cs}
         \KwIn{$n \times m$的基因表达矩阵E，弃巢比例p，种群大小N，光吸收系数$\gamma$，最大吸引度$\beta_0$，步长因子$\alpha$，最大迭代次数Iter}
@@ -51,7 +51,7 @@
         B = Best($P_{FA-CS}$) \\
         return B \\
         \end{algorithm}
-       \item[(3)] 嵌套执行CS-FA：该方案在每一次迭代都会执行CS操作和FA操作，并且采用竞标策略保留两次操作中最优的个体。
+       \item[3.] 嵌套执行CS-FA：该方案在每一次迭代都会执行CS操作和FA操作，并且采用竞标策略保留两次操作中最优的个体。
         \begin{algorithm}[htbp]
         \caption{CSFA混合方案}\label{alg:csfa}
         \KwIn{$n \times m$的基因表达矩阵E，弃巢比例p，种群大小N，光吸收系数$\gamma$，最大吸引度$\beta_0$，步长因子$\alpha$，最大迭代次数Iter，最大早熟次数maxEarlyStopCnt}
