@@ -6,7 +6,7 @@
 假设$S\subset \mathbb{R}^n$为一个n维的搜索空间，$f_i(x),i=1,...,k$为定义在$S$上的k个目标函数，并且定义向量函数$f(x)$和m个不同的限制函数如下。
 \begin{align}
    f(x) &= [f_1(x),f_2(x),...,f_k(x)] \\
-    g(x) &\leq 0, i= 1,...,m
+    g_i(x) &\leq 0, i= 1,...,m
 \end{align}
 然后，我们想要找到一个解$x^{\ast} =(x_1^{\ast},x_2^{\ast},...,x_n^{\ast})$使得$f(x)$最小。但是，目标函数$f_i(x)$之间可能是互相冲突的，这使得不可能在$S$上找到一个全局的最优解。由于这个缘故，我们需要恰当地定义在多目标问题上的优化问题。
 
@@ -29,10 +29,10 @@
     \begin{equation}
       f(x) = [MSR(x), -GV(x), -CV(x)]  
     \end{equation}
-    这里一共有三个目标函数，根据帕雷托支配的定义，如果$f(x_a)\le f(x_b)$严格成立且至少存在某个目标函数$f_i(x)$，使得$f_i(x_a)<f_i(x_b)$,那么$x_a$支配$x_b$。
+    这里一共有三个目标函数，根据帕雷托支配的定义，如果$f(x_a)\le f(x_b)$严格成立且至少存在某个目标函数$f_i(x)$，使得$f_i(x_a)<f_i(x_b)$,那么$x_a$支配$x_b$。值得一提的是，如果$f(x_a)= f(x_b)$，那么$x_a$与$x_b$互不支配。
     
     \subsection{多目标趋向性操作}
-    趋向性操作是指细菌在搜索区间中的随机搜索，每走一步都要和之前的解进行比较，如果新位置优于旧位置，则进行跟新，这是算法收敛的保证。同时，为了增加种群的多样性，本文为BFO增加了Levy飞行。而在多目标问题中，需要基于Pareto支配关系来决定是否更新位置。对于旧位置$x_{old}$和新位置$x_{new}$，如果之间相互支配，则选择支配位置而淘汰被支配位置；否则，进行归一化之后依据权重系数进行比较，如算法\ref{alg:norm}所示。
+    趋向性操作是指细菌在搜索区间中的随机搜索，每走一步都要和之前的解进行比较，如果新位置优于旧位置，则进行更新，这是算法收敛的保证。同时，为了增加种群的多样性，本文为BFO增加了Levy飞行。而在多目标问题中，需要基于Pareto支配关系来决定是否更新位置。对于旧位置$x_{old}$和新位置$x_{new}$，如果之间相互支配，则选择支配位置而淘汰被支配位置；否则，进行归一化之后依据权重系数进行比较，如算法\ref{alg:norm}所示。
 
     \begin{algorithm}[htbp]
     \caption{归一化比较} \label{alg:norm}
@@ -42,14 +42,14 @@
     $f_{old} = f(x_{old})$　 //计算旧位置的适应值\\
     $f_{total} = f_{new} + f_{old}$　   \\
     $percent_{new} = f_{new} \div f_{total}$　 //分别计算新旧个体中相同\\
-    $percent_{new} = f_{new} \div f_{total}$　 //目标的函数值所占的比例\\
+    $percent_{old} = f_{old} \div f_{total}$　 //目标的函数值所占的比例\\
     $sub = percent_{new} - percent_{old}$ 　 //计算比例的差值\\
     $rate = sub \ast weight$　 //矩阵相乘各目标函数的权重\\
     \uIf{rate >0}{
        return $x_{new}$　 //若rate大于0，则新位置更优
     }
     \Else{
-        return $x_{old}$ //否则，旧位置更优
+        return $x_{old}$　 //否则，旧位置更优
     }
     % \For{$i = 0;\ i < M;\ i = i + 2$}{
     %     Do something
@@ -71,20 +71,39 @@
         $ave = 1 \div |P^*|$　 //计算平均的比例\\
         $sub = percent - ave$　 //个体比例减去平均比例 \\
         $rate = sub \ast weight$　 //矩阵相乘各目标函数的权重\\
-        $sort(P^*, rate)$　 //排序\\
+        $sort(P^*, rate)$　 //按照得分排序\\
         $outPareto = P^*[1:outPSize,:]$ 　 //淘汰排在outPSize之后的解\\
-        $return outPareto$
+        return $outPareto$
     \end{algorithm}
     \begin{enumerate}
        \item[1.] 将新产生的非支配解集加入到外部集中并去重，如果外部集的大小没有变化，则说明都是重复的，直接返回，否则执行第（2）步
-       \item[2.] 计算外部集每个个体的被支配次数，然后淘汰支配次数非零的被支配解，如果剩余个数小于事先给定的阈值，则直接返回，否则执行（３）步
+       \item[2.] 计算外部集每个个体的被支配次数，然后淘汰支配次数非零的被支配解，如果剩余个数小于事先给定的阈值，则直接返回，否则执行（3）步
        \item[3.] 剩余的都是非支配解，为了维持外部集的大小需要进行择优，具体过程如算法\ref{alg:updatePareto}所示。
     \end{enumerate} 
+
 \section{实验结果及分析}
-为了验证MOBFOB算法的有效性，本文分别在每个数据集上执行了五次，每次执行生成20个帕雷托解，每个数据集生成100个双聚类。其中，种群规模$nPop=100$，趋化次数$Nc=50$，复制操作次数$Nre=5$，驱散次数$Ned=2$，各目标函数的权重$weight = [-0.7, 0.2, 0.1]$。数据集的详细信息之前已经介绍过，这里不再赘述。
+为了验证MOBFOB算法的有效性，本文分别在每个数据集上执行了五次，每次执行生成20个帕雷托解，每个数据集生成100个双聚类。其中，种群规模$nPop=100$，趋化次数$Nc=50$，复制操作次数$Nre=5$，驱散次数$Ned=2$，各目标函数的权重$weight = [-0.7, 0.2, 0.1]$。实验所用数据集与上一章一致，详细信息之前已经介绍过，这里不再赘述。
+
+    \subsection{基因分布情况}
+    图\ref{fig:mobfo_bics}为MOBFOB在YC数据集上的其中两个双聚类（编号a和编号b）的基因分布情况。其中编号a双聚类有2907个基因和31个条件，MSR为362.10，Var为376.43；编号b双聚类有2908个基因和32个条件，MSR为343.66，Var为356.14。从图中可以明显地看出，双聚类中的基因，随着条件的改变呈现出一定的相似变化。这也就是说，这些基因在这些条件下是有关联的。
+    \begin{figure}[htbp]
+    \setlength{\subfigcapskip}{-1bp}
+    \centering
+    \begin{minipage}{.9\textwidth}
+    \centering
+    \subfigure{}\addtocounter{subfigure}{-2}
+    \subfigure{\subfigure[编号a]{\includegraphics[width=0.4\textwidth]{mo_bic1}}}
+    \hspace{.1em}
+    \subfigure{}\addtocounter{subfigure}{-2}
+    \subfigure{\subfigure[编号b]{\includegraphics[width=0.4\textwidth]{mo_bic2}}}
+    \end{minipage}
+    \vspace{0.2em}
+    \caption{MOBFO在YC数据集上两个双聚类的基因分布情况}
+    \label{fig:mobfo_bics}
+    \end{figure}
 
     \subsection{质量验证指标}
-    图\ref{fig:mobfo_bcll}到图\ref{fig:mobfo_rat}分别是MOBFO算法在各数据集上，每次趋化操作后种群最小适应值的变化曲线。从图中可以看出，尽管在GV和CV指标上会出现明显的起伏，但是总体的趋势还是下降的。需要额外提示的是，纵坐标为GV和CV的负数，越低则容量越大。而MSR一直在稳步下降，这是因为在进行趋化操作时，对于MSR的权重是最大的，所以算法会在两个解互不支配时，牺牲一部分容量来换取MSR的下降，这也解释了GV和CV的起伏。
+    图\ref{fig:mobfo_bcll}到图\ref{fig:mobfo_rat}分别是MOBFO算法在各数据集上，每次趋化操作后种群最小适应值的变化曲线。从图中可以看出，尽管在GV和CV指标上会出现明显的起伏，但是总体的趋势还是下降的。需要额外提示的是，纵坐标为GV和CV的负数，越低则容量越大。而MSR一直在稳步下降，这是因为在进行趋化操作时，对于MSR的权重是最大的，所以算法会在两个解互不支配时，牺牲一部分容量来换取MSR的下降，这也解释了GV和CV的起伏。同时，注意到算法在后期会有一定程度的发散，这是因为Levy飞行以及细菌觅食算法是具有随机性的，这有助于提高种群的多样性和跳出局部最优。
 
     \begin{figure}[htbp]
     \setlength{\subfigcapskip}{-1bp}
@@ -161,7 +180,7 @@
     \caption{MOBFO在RatStrain数据集上适应值变化曲线}
     \label{fig:mobfo_rat}
     \end{figure}
-    从适应值的变化曲线可以看出，算法能够在可行域上找到MSR较低但容量高的双聚类，为了更准确的表示算法双聚类的质量，表\ref{tab:mobfo}为MOBFOB算法在各数据集上的各质量指标的平均值和标准差。跟\ref{sec:csfa_exper}节中的实验数据相比，MOBFOB并没有很突出的表现，但是，MOBFOB由于外部集保存了多个帕雷托解，所以在执行效率上有着比单目标优化算法足够多的优势。
+    从适应值的迭代变化曲线可以看出，算法能够在可行域上找到MSR较低但容量高的双聚类，为了更准确的表示双聚类算法的性能，表\ref{tab:mobfo}为MOBFOB算法在各数据集上的各质量指标的平均值和标准差。跟\ref{sec:csfa_exper}节中的实验数据相比，MOBFOB并没有很突出的表现，这也不足为奇。但是，MOBFOB由于外部集保存了多个帕雷托解，所以在执行效率上有着比单目标优化算法足够多的优势。
     
     \begin{table}[htbp]
         \caption{MOBFOB在各数据集上的质量指标的平均值和标准差}\label{tab:mobfo}
@@ -181,7 +200,7 @@
     \end{table}
 
     \subsection{生物验证指标}
-    为了验证MOBFOB算法能够找到具有生物意义的双聚类，本文对得到的双聚类进行了详细的GO分析，生物验证指标的平均值和标准差如表\ref{tab:mobfo_go}所示。图\ref{fig:go_bcll}给出了MOBFOB在BCLL数据集上的某个双聚类（编号1）GO分析后部分较为显著的GO项，其中包括了15个生物过程（Biological Process），10个细胞组成（Cellualr Component），15个分子功能（Molecular Function）。该双聚类由4529个基因和7个样本组成。由图\ref{fig:go_bcll}可知，该双聚类对于生物过程的富集程度要高于其他两种,而且所富集的GO项和相关的基因个数都表明了其具有一定的生物意义。  
+    为了验证MOBFOB算法能够找到具有生物意义的双聚类，本文对得到的双聚类进行了详细的GO分析，生物验证指标的平均值和标准差如表\ref{tab:mobfo_go}所示。图\ref{fig:go_bcll}给出了MOBFOB在BCLL数据集上的某个双聚类（编号1）GO分析后部分较为显著的GO项，其中包括了15个生物过程（Biological Process），10个细胞组成（Cellualr Component），15个分子功能（Molecular Function）。该双聚类由4529个基因和7个样本组成。由图\ref{fig:go_bcll}可知，该双聚类对于生物过程的富集程度要高于其他两种，其次是细胞组成，分子功能最低，而且所富集的GO项和相关的基因个数都表明了其具有一定的生物意义。  
 
     \begin{table}[htbp]
         \caption{MOBFOB在各数据集上的生物验证指标的平均值和标准差}\label{tab:mobfo_go}
@@ -199,29 +218,29 @@
 
     \begin{figure}[htbp]
         \centering
-        \includegraphics[width = 1\textwidth]{go_bcll_1}
+        \includegraphics[width = 1\textwidth]{mo_go_bcll_1}
         \caption{MOBFOB算法得到的双聚类（编号1）主要的GO项}
         \label{fig:go_bcll}
     \end{figure}
-    表\ref{tab:go_term}为双聚类（编号1）相关GO项的详细信息。例如，表中第二行对应的ID为GO:0048545，该GO项代表的是对类固醇激素的反应，4529个基因中有189个与该GO项相关，从BCLL数据集上随机选择4529个基因至少包含这189个基因的概率是4.52E-23。这说明了该双聚类的基因集合中存在功能紧密相关的子集合，形成了一种明显的基因表达模式。
+    表\ref{tab:go_term}为双聚类（编号1）相关GO项的详细信息。例如，表中第二行对应的ID为GO:0048545，该GO项代表的是生物过程中对类固醇激素的反应，4529个基因中有189个与该GO项相关，从BCLL数据集上随机选择4529个基因至少包含这189个基因的概率是4.52E-23。该双聚类中有184个基因参与到了GO:0005924中，该项的描述为细胞组成中的细胞-基质粘附连接，其调整后的P值为2.68E-20。这说明了该双聚类的基因集合中存在功能紧密相关的子集合，形成了一种明显的基因表达模式。
 
     \begin{table}[htbp]
         \caption{双聚类（编号1）相关GO项的详细信息}\label{tab:go_term}
         \vspace{0.5em}\centering\wuhao
-        \begin{tabular}{ccccc}
+        \begin{tabular}{cccccc}
         \toprule[1.5pt]
-        GOID & 调整P值 &  基因个数 & 描述\\
+        GOID & GO类别 &调整P值 &  基因个数 & GO描述\\
         \midrule[1pt]
-        GO:0043434  &3.74E-25& 212& response to peptide hormone \\
-        GO:0048545  &4.52E-23& 189& response to steroid hormone \\
-        GO:0019932  &3.53E-21& 203& second-messenger-mediated signaling \\
-        GO:0043025  &1.37E-20& 215& neuronal cell body \\
-        GO:0059240  &2.68E-20& 184& cell-substrate adherens junction \\
-        GO:0004674  &2.23E-12& 185& protein serine/threonine kinase activity \\
-        GO:0050839  &1.77E-15& 215& cell adhesion molecule binding \\
+        GO:0043434 &生物过程 &3.74E-25& 212& response to peptide hormone \\
+        GO:0048545 &生物过程 &4.52E-23& 189& response to steroid hormone \\
+        GO:0019932 &生物过程 &3.53E-21& 203& second-messenger-mediated signaling \\
+        GO:0043025 &细胞组成 &1.37E-20& 215& neuronal cell body \\
+        GO:0005924 &细胞组成 &2.68E-20& 184& cell-substrate adherens junction \\
+        GO:0004674 &分子功能 &2.23E-12& 185& protein serine/threonine kinase activity \\
+        GO:0050839 &分子功能 &1.77E-15& 215& cell adhesion molecule binding \\
         \bottomrule[1.5pt]
         \end{tabular}
     \end{table}
 
 \section{本章小结}
-本章为了解决单目标优化的效率问题，将细菌觅食算法的多目标版本用于双聚类分析。首先简要介绍了多目标优化中的相关概念，然后结合多目标优化和细菌觅食算法的特点，提出了MOBFOB算法。实验数据证明了算法的有效性，即能够在迭代中优化多个目标，并最终得到有显著生物意义的双聚类，达到预期目标。
+本章为了解决单目标优化的效率问题，将细菌觅食算法的多目标版本用于双聚类分析。首先简要介绍了多目标优化中的相关概念，然后结合多目标优化和细菌觅食算法的特点，提出了MOBFOB算法。实验先是通过双聚类的基因分布情况直观地观察双聚类的变化一致性，接着又从质量验证指标和生物验证指标证明了算法的有效性，即能够在迭代中优化多个目标，并最终得到有显著生物意义的双聚类，达到预期目标。

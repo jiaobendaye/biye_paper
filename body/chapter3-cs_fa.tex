@@ -4,7 +4,7 @@
 
 \section{混合双聚类算法分析}
     \subsection{编码设计}
-    给定基因表达矩阵$E(X,Y)$，比特串$x_p = (g_1,\dots,g_i,\dots,g_m,s_1,\dots,s_j,\dots,s_n)$，$ p=1,\dots,N, $ 被用来表示一个双聚类或子矩阵$E(I,J)$。其中， $N,m,n$分别是种群数量,$E$的基因数目和样本数目。当$E$中第$i$个基因或第$j$个样本被选为$E(I,J)$时，$g_i=1$或$s_j=1$，否则，$g_i=0$或$s_j=0$，$1\le i \le m$ 且$1\le j \le n$。
+    一般来说有两种常见的编码设计，第一种通过0和1比特串表示，第二种则是直接通过行和列的索引值来表示。对于第一种，每个解的长度是确定的，而第二种会跟随着双聚类容量的变化而变化。本文采用最为广泛使用的第一种编码方式。给定基因表达矩阵$E(X,Y)$，比特串$x_p = (g_1,\dots,g_i,\dots,g_m,s_1,\dots,s_j,\dots,s_n)$，$ p=1,\dots,N, $ 被用来表示一个双聚类或子矩阵$E(I,J)$。其中， $N,m,n$分别是种群数量,$E$的基因数目和样本数目。当$E$中第$i$个基因或第$j$个样本被选为$E(I,J)$时，$g_i=1$或$s_j=1$，否则，$g_i=0$或$s_j=0$，$1\le i \le m$ 且$1\le j \le n$。
 
     原始的群智能算法的解（粒子,鸟巢,萤火虫）都是多维的连续值,需要映射成对应的比特串后才能用来表示双聚类。通常的做法就是设置上限为1,下限为0,然后判断是否大于0.5,将实数值映射成比特值。如下图所示：
     \begin{figure}[htbp]
@@ -21,10 +21,10 @@
       GV(B) & = |I| \\
       CV(B) & = |J|
     \end{align}
-    其中，$GV(B)$，$CV(B)$分别是$B(I,J)$中基因和实验条件的容量。$\lambda,\mu$是针对量纲不同问题，$\lambda,\mu$越大则GV和CV对适应值的影响越大，其值视数据集的情况而定。
+    其中，$GV(B)$，$CV(B)$分别是$B(I,J)$中基因和实验条件的容量。$\lambda,\mu$是针对量纲不同问题，$\lambda,\mu$越大则GV和CV对适应值的影响越大，其值视数据集的情况而定。从式中可以看出当MSR越小，基因容量和条件容量越大时，适应值越小，也就是说双聚类的质量越好。
     
     \subsection{混合方案设计}\label{sec:three}
-    大致有两种策略将两个算法混合，顺序执行策略和嵌套策略。第一种策略是将一个算法的结果作为另一个算法的输入，特点是两个算法前后互不影响。例如，Nepomuceno 等将SEBI的结果输入到SSB算法中，进一步提高双聚类的质量。第二种策略是将两个算法的揉合到一起，将某一个算法作为局部功能嵌入到另一个算法中，这时两种算法前后不是独立的。例如，Bryan 等将CC算法的局部搜索功能作为SAB算法的一步，以提高双聚类的容量。基于上述二种策略,可有如下三种方案:
+    大致有两种策略将两个算法混合，顺序执行策略和嵌套策略。第一种策略是将一个算法的结果作为另一个算法的输入，特点是两个算法前后互不影响。例如，Nepomuceno 等将SEBI的结果输入到SSB算法中，进一步提高双聚类的质量；陈佳瑜使用量子粒子群算法的输出作为FLOC算法的输入。第二种策略是将两个算法的揉合到一起，将某一个算法作为局部功能嵌入到另一个算法中，这时两种算法前后不是独立的。例如，Bryan 等将CC算法的局部搜索功能作为SAB算法的一步，以提高双聚类的容量。基于上述二种策略,可有如下三种方案:
     \begin{enumerate}
        \item[1.] 顺序执行CS-FA：这种方案可以看作将FAB算法的随机初始化替换成CSB算法，先使用CSB算法生成双聚类，然后使用FAB算法进一步提高双聚类的质量，如算法\ref{alg:cs-fa}所示。
         \begin{algorithm}[htbp]
@@ -132,9 +132,24 @@
     \end{table}
 
     \subsection{CSFAB的质量验证指标比较分析}
-    为了较公平和全面地衡量本文提出的CSFAB算法的有效性，本文选择了采用相同的编码方案和适应值函数的萤火虫算法，布谷鸟搜索算法和粒子群算法作为对比算法，并分别命名为FAB，CSB，PSOB。表\ref{tab:gv}和表\ref{tab:cv}分别为各算法在各数据集上的基因容量和样本容量的平均值和标准差。同时，为了评价算法的多样性，图\ref{fig:coverRate}展示了各算法在不同基因表达数据集上的覆盖率。图\ref{fig:msr}和图\ref{fig:ri}给出了各算法在在四个数据集上MSR以及RI的箱线图。
+    为了较公平和全面地衡量本文提出的CSFAB算法的有效性，本文选择了采用相同的编码方案和适应值函数的萤火虫算法，布谷鸟搜索算法以及粒子群算法作为对比参照算法，并分别命名为FAB，CSB，PSOB，其参数如表\ref{tab:params}所示，其中种群规模均为100。表\ref{tab:gv}和表\ref{tab:cv}分别为各算法在各数据集上的基因容量和样本容量的平均值和标准差。同时，为了评价算法的多样性，图\ref{fig:coverRate}展示了各算法在不同基因表达数据集上的覆盖率。图\ref{fig:msr}和图\ref{fig:ri}给出了各算法在在四个数据集上MSR以及RI的箱线图。
     
-    从表\ref{tab:gv}可以看出，PSOB在BCLL数据集上表现最优，而CSFAB在其他三个数据集上均取得了最大的基因容量。而表\ref{tab:cv}表明，在样本容量方面，CSFAB表现平平，仅在量级最大的PBC中比另外三个算法更优，其他三个数据集均为FAB算法最优。但在BCLL中，各算法的表现相差不大。实验数据说明，在数量级比较大时，CSFAB算法更占优势。图\ref{fig:coverRate}可知，无论是在什么量级的数据中，相比其他算法，CSFAB算法总能找到更多样化的双聚类。
+    从表\ref{tab:gv}可以看出，PSOB在BCLL数据集上表现最优，而CSFAB在其他三个数据集上均取得了最大的基因容量。而表\ref{tab:cv}表明，在样本容量方面，CSFAB表现平平，仅在量级最大的PBC中比另外三个算法更优，其他三个数据集均为FAB算法最优。但在BCLL中，各算法的表现相差不大。实验数据说明，在数量级比较大时，CSFAB算法更占优势。图\ref{fig:coverRate}可知，无论是在什么量级的数据中，相比其他算法，CSFAB算法总能找到更多样化的双聚类，这与殷路的研究结论保持一致。
+
+    \begin{table}[htbp]
+        \caption{CSFAB等四个算法的参数设置}\label{tab:params}
+        \vspace{0.5em}\centering\wuhao
+        \begin{tabular}{cc}
+        \toprule[1.5pt]
+        算法名 & 参数 \\
+        \midrule[1pt]
+        CSB & $\alpha=0.01,P_a=0.25$\\
+        FAB & $\alpha=0.25,\beta_0=0.20,\gamma=1$\\
+        PSOB & $w=0.6, c_1=1.80, c_2=1.00$\\
+        CSFAB & $\alpha_{fa}=0.25,\alpha_{cs}=0.01,\beta_0=0.20,\gamma=1,P_a=0.25$\\
+        \bottomrule[1.5pt]
+        \end{tabular}
+    \end{table}
 
     \begin{table}[htbp]
         \caption{CSFAB等四个算法的基因容量平均值与标准差}\label{tab:gv}
@@ -172,7 +187,7 @@
         \caption{CSFAB等四个算法的覆盖率}
         \label{fig:coverRate}
     \end{figure}
-    从图\ref{fig:msr}可以看出，CSFAB在全部的数据集上都找得了MSR最小的双聚类，并且优势明显。一方面，这是由于适应值函数中MSR所占的比重是相对较大的，这也解释了在样本容量上，CSFAB表现并不突出；另一方面，结合Lavy飞行和萤火虫，使得算法有了更强的寻优能力。值得一提的是，CSFAB算法的四分位间距是最小的，而且其他算法出现了较多的异常点，这一现象说明了CSFAB算法的稳定性。
+    从图\ref{fig:msr}可以看出，CSFAB在全部的数据集上都找得了MSR最小的双聚类，并且优势明显。一方面，这是由于适应值函数中MSR所占的比重是相对较大的，这也解释了在样本容量上，CSFAB表现并不突出；另一方面，结合Lavy飞行和萤火虫，使得算法有了更强的寻优能力。值得一提的是，CSFAB算法的四分位间距是最小的，而且其他算法出现了较多的异常点，这一现象说明了CSFAB算法要比其他三个算法更为稳定。
 
     \begin{figure}[htbp]
     \setlength{\subfigcapskip}{-1bp}
@@ -231,7 +246,7 @@
     以上分析表明，尽管CSFAB在样本容量方面没有取得足够的优势，但是在基因容量和MSR以及RI上都取得了显著的成绩。不过，对于基因表达数据的一个双聚类，最终还需要以生物质量指标来判断优劣。
 
     \subsection{CSFAB的生物验证指标比较分析}
-    虽然CSFAB在质量评价指标上表现不俗，但是对于双聚类来说，还是要找到具有生物意义的双聚类才行。因此，我们对实验中得到的双聚类进行了GO富集分析，并通过图表的方式展示。表\ref{tab:we}给出了CSFAB等四个算法的WEScore平均值与标准差。
+    虽然CSFAB在质量评价指标上表现不俗，但是对于基因表达数据的双聚类来说，还是要找到具有生物意义的双聚类才行。因此，我们对实验中得到的双聚类进行了GO富集分析，并通过图表的方式展示。表\ref{tab:we}给出了CSFAB等四个算法的WEScore平均值与标准差。
 
     由表\ref{tab:we}可知，在RatStrain和PBC这两个大数据集上，CSFAB算法是最优的，而且在Yeast Cell数据集上是次优的，仅比最优的FAB低了2.5个百分点。这充分说明CSFAB算法更适合在大规模的数据上搜索相对其它算法难以搜索到的双聚类。
 
@@ -276,6 +291,34 @@
     \caption{CSFAB等四个算法的meanPValue}
     \label{fig:meanP}
     \end{figure}
+
+    图\ref{fig:csfa_go_bcll}给出了CSFAB算法在BCLL数据集上某个双聚类（编号0）的部分GO富集分析结果。该双聚类包含了5923个基因和8个样本。图中其中包含了15个生物过程项，15个细胞组成项，15个分子功能项。由图\ref{fig:csfa_go_bcll}可知，该双聚类在分子功能上取得了最大的富集程度，但在其他GO项上富集的程度要比其他两种弱一些。表\ref{tab:go_term_0}给出了各类GO项中较为显著项的详细信息。从表中可以看出，该双聚类中有230个基因参与到了GO:0050839项当中，而该项的GO描述为分子功能中的细胞粘附分子结合。如果要从BCLL数据集中随机抽取5923个基因，至少包含该230个基因的概率为5.33E-23；该双聚类中有210个基因参与到了GO:0043025项中，该项为细胞组成中的神经元细胞体，其调整后的P值为6.61E-21。这些数据再一次说明了算法找到的双聚类具有明显的生物意义。
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width = 1\textwidth]{csfa_go_bcll_0}
+        \caption{CSFAB算法得到的双聚类（编号0）主要的GO项}
+        \label{fig:csfa_go_bcll}
+    \end{figure}
+
+    \begin{table}[htbp]
+        \caption{双聚类（编号0）相关GO项的详细信息}\label{tab:go_term_0}
+        \vspace{0.5em}\centering\wuhao
+        \begin{tabular}{cccccc}
+        \toprule[1.5pt]
+        GOID & GO类别 &调整P值 &  基因个数 & GO描述\\
+        \midrule[1pt]
+        GO:0018018  &生物过程 &1.19E-29& 190& peptidyl-tyrosine phosphorylation\\
+        GO:0018212  &生物过程 &1.19E-29& 191& peptidyl-tyrosine modification\\
+        GO:0031667  &生物过程 &9.11E-22& 220& response to nutrient levels\\
+        GO:0005924  &细胞组成 &3.44E-23& 187& cell-substrate adherens junction\\
+        GO:0043025  &细胞组成 &6.61E-21& 210& neuronal cell body\\
+        GO:0005925  &细胞组成 &3.44E-23& 186& focal adhesion\\
+        GO:0050839  &分子功能 &5.33E-23& 230& cell adhesion molecule binding \\
+        GO:0045296  &分子功能 &5.23E-13& 147& cadherin binding\\
+        GO:0031625  &分子功能 &1.36E-11& 129& cell adhesion molecule binding \\
+        \bottomrule[1.5pt]
+        \end{tabular}
+    \end{table}
 
 \section{本章小结}
 本文为了解决元启发式算法在双聚类时覆盖率不高和生物意义不明显的问题，提出了将CS算法和FA算法结合的CSFAB算法。首先提出了三种混合的方案，经实验比较后选择了嵌套执行的方案。然后，在四个数据集上对CSB，FAB和PSOB等四个算法进行了讨论分析。最后，实验证明，CSFAB算法表现稳定，不仅提高了双聚类的多样性，而且保证了其生物意义，在规模大的数据集上体现得更加明显。
