@@ -43,7 +43,7 @@
   etitle={Research on  biclustering of gene expression data based on swarm intelligence},
   esubtitle={This is the sub title},
   exueke={Engineering},
-  esubject={Computer Architecture},
+  esubject={Computer Software and Theory},
   eaffil={\emultiline[t]{College of Computer and Information Science}},
   eauthor={FAN Zhenhao},
   esupervisor={OU Ling},
@@ -60,15 +60,13 @@
 \begin{cabstract}
   高通量基因微阵列技术的出现, 产生了大量的基因表达数据。这些数据在追踪生物过程,基因规则发现以及病理分析中有着至关重要的作用。通常，研究人员通过聚类来挖掘相关的基因集合，然后进行生物学上的整理和分析。然而，由于基因表达数据独特的数据结构和背后的生物意义，倾向于找到全局模式的传统聚类方法并不能很好的找出符合要求的具有局部模式的聚类。于是，更符合基因表达数据特点的双聚类分析被引入进来。
   
-  基因表达数据的双聚类分析是指, 找出在某些条件子集下包含一致表达波动的基因子集。双聚类分析已经被证明为NP难问题，因此大部分算法都是通过优化策略来尽可能得找到较优解。同时，因为双聚类的指标之间存在一定程度的负相关，所以双聚类分析可以看作是一种多目标优化问题。在优化算法之中，元启发算法中的群智能算法因其高效和简洁，在学术界和工业界都得到了很大的关注和应用。近年来，针对表达数据高维度, 高冗余的特点, 许多群智能优化算法以及多目标优化算法被用于双聚类分析。
-
   当前，对于将群智能算法运用到双聚类分析的研究仍存在或多或少的问题。一方面是群智能算法本身的缺陷所致，如每次只能得到一个最优解，有可能陷入局部最优等；另一方面是没有能将群智能的特点与双聚类分析有机的结合起来，如选取合适的评价指标进行单目标或多目标的寻优。本文基于布谷鸟搜索算法、萤火虫算法和细菌觅食算法等群智能优化算法，从算法结合以及多目标优化等方面进行基因表达数据双聚类的分析研究，旨在解决当前双聚类算法的聚类质量差和生物意义不明显等问题。论文的主要工作包括：
 
-  \begin{itemize}
-    \item[1.] 提出基于布谷鸟搜索算法和萤火虫算法的混合双聚类算法（Cuckoo Search and Firfly Algorithm hybrid Biclustering，CSFAB）。考虑到布谷鸟算法和萤火虫算法可以看作互补的关系，前者具有较强的全局寻优能力，而后者具有较快的收敛速度，于是本文尝试将两者结合。首先，通过实验确定了有效的结合策略，然后将布谷鸟搜索算法的全局搜索能力与萤火虫算法的快速收敛能力有效地结合起来。CSFAB算法可以显著地提高搜索速度和范围，同时能够跳出局部最优解和找到包含不同基因的双聚类，从而提高双聚类的多样性。与CSB、FAB和PSOB等算法比较，实验表明CSFAB算法的双聚类质量和生物意义更优。
+  \begin{enumerate}
+    \item 提出基于布谷鸟搜索算法和萤火虫算法的混合双聚类算法（Cuckoo Search and Firfly Algorithm hybrid Biclustering，CSFAB）。考虑到布谷鸟算法和萤火虫算法可以看作互补的关系，前者具有较强的全局寻优能力，而后者具有较快的收敛速度，于是本文尝试将两者结合。首先，通过实验确定了有效的结合策略，然后将布谷鸟搜索算法的全局搜索能力与萤火虫算法的快速收敛能力有效地结合起来。CSFAB算法可以显著地提高搜索速度和范围，同时能够跳出局部最优解和找到包含不同基因的双聚类，从而提高双聚类的多样性。与CSB、FAB和PSOB等算法比较，实验表明CSFAB算法的双聚类质量和生物意义更优。
 
-    \item[2.] 提出基于多目标细菌觅食算法的双聚类算法（Multi-Object Bacterial Foraging Algorithm Biclustering，MOBFOB）。因为双聚类分析可以看作多目标优化问题，本文将传统的单目标细菌觅食算法依据基因表达数据双聚类分析的特点进行了改进，主要包括：（1）对于互不支配时，较优解的确定；（2） 根据种群中各自的被支配次数排序；（3）引入外部占优解集增加多样性。该算法使用多目标细菌觅食算法同时优化均方残差和体积等双聚类质量评价指标，找到占优的双聚类解集。通过对双聚类的质量评价指标和生物富集分析，证明了MOBFOB算法能够有效且快速地找到具有显著生物意义的双聚类。
-  \end{itemize}
+    \item 提出基于多目标细菌觅食算法的双聚类算法（Multi-Object Bacterial Foraging Algorithm Biclustering，MOBFOB）。因为双聚类分析可以看作多目标优化问题，本文将传统的单目标细菌觅食算法依据基因表达数据双聚类分析的特点进行了改进，主要包括：（1）对于互不支配时，较优解的确定；（2） 根据种群中各自的被支配次数排序；（3）引入外部占优解集增加多样性。该算法使用多目标细菌觅食算法同时优化均方残差和体积等双聚类质量评价指标，找到占优的双聚类解集。通过对双聚类的质量评价指标和生物富集分析，证明了MOBFOB算法能够有效且快速地找到具有显著生物意义的双聚类。
+  \end{enumerate}
 
 
 \end{cabstract}
@@ -76,15 +74,14 @@
 \begin{eabstract}
   The advent of high-throughput gene microarray technology has generated a large amount of gene expression data. These data play a vital role in tracking biological processes, discovering genetic rules, and analyzing pathology. Generally, researchers use clustering to mine related sets of genes, and then organize and analyze them biologically.However, due to the unique data structure of the gene expression data and the biological significance behind it, traditional clustering methods that tend to find global patterns are not good at finding clusters with local patterns that meet the requirements.Therefore, biclustering analysis that more suitable for the characteristics of gene expression data was introduced.
   
-  Biclustering of gene expression data refers to finding a subset of genes that contain consistent expression fluctuations under certain conditional subsets.Biclustering analysis has proven to be an NP-hard problem, so most algorithms try to find the best solution by optimizing the strategy. At the same time, because there is a certain degree of negative correlation between the indicators of biclustering, biclustering analysis can be regarded as a multi-objective optimization problem.Among the optimization algorithms, the swarm intelligence algorithm in the meta-heuristic algorithm has received great attention and application in academia and industry because of its efficiency and simplicity.In recent years, in view of the high dimensionality and high redundancy of expression data, many swarm intelligence algorithms have been used in biclustering.
 
   At present, the research on the application of swarm intelligence algorithms to biclustering analysis still has more or less problems.On the one hand, it is caused by the shortcomings of the swarm intelligence algorithm. For example, only one optimal solution can be obtained at a time, and it may fall into a local optimal.On the other hand, it is caused by not organically combining the characteristics of swarm intelligence with biclustering analysis, such as selecting appropriate evaluation indicators for single or multi-objective optimization. Based on swarm intelligence optimization algorithms such as cuckoo search algorithm, firefly algorithm and bacterial foraging algorithm, this paper conducts analysis and research on the biclustering of gene expression data from the aspects of algorithm combination and multi-objective optimization. Problems such as poor quality and insignificant biological significance. The main work of the paper includes:
   
-  \begin{itemize}
-    \item[1.] {  A hybrid biclustering algorithm CSFAB(Cuckoo Search and Firfly Algorithm hybrid Biclustering) based on cuckoo search algorithm and firefly algorithm is proposed. Considering that the cuckoo algorithm and the firefly algorithm can be regarded as a complementary relationship, the former has a strong global optimization ability, while the latter has a faster convergence speed, so this article attempts to mix the two.First, an effective hybrid strategy was determined through experiments, and then the global search ability of the cuckoo search algorithm and the fast convergence ability of the firefly algorithm were effectively combined. The CSFAB algorithm can significantly improve the search speed and range, and at the same time can jump out of the local optimal solution and find biclusters containing different genes, thereby improving the diversity of biclusters.Compared with CSB, FAB, and PSOB algorithms, experiments show that the quality and biological significance of CSFAB algorithm is better.}
+  \begin{enumerate}
+    \item {  A hybrid biclustering algorithm CSFAB(Cuckoo Search and Firfly Algorithm hybrid Biclustering) based on cuckoo search algorithm and firefly algorithm is proposed. Considering that the cuckoo algorithm and the firefly algorithm can be regarded as a complementary relationship, the former has a strong global optimization ability, while the latter has a faster convergence speed, so this article attempts to mix the two.First, an effective hybrid strategy was determined through experiments, and then the global search ability of the cuckoo search algorithm and the fast convergence ability of the firefly algorithm were effectively combined. The CSFAB algorithm can significantly improve the search speed and range, and at the same time can jump out of the local optimal solution and find biclusters containing different genes, thereby improving the diversity of biclusters.Compared with CSB, FAB, and PSOB algorithms, experiments show that the quality and biological significance of CSFAB algorithm is better.}
 
-    \item[2.] { MOBFOB (Multi-object Bacterial Foraging Algorithm Biclustering) based on a multi-object bacterial foraging algorithm is proposed. Because biclustering analysis can be considered as a multi-objective optimization problem, this paper improves the traditional single-object bacterial foraging algorithm based on the characteristics of biclustering analysis of gene expression data,mainly include:(1)  Determination of better solution when there is no dominant solution;(2) Sort according to the number of times they are dominated in the population; (3)Introducing externally dominant solution sets to increase diversity.This algorithm uses a multi-object bacterial foraging algorithm to simultaneously optimize the bicluster's quality evaluation indicators such as mean square residual and volume to find the dominant biclustering solution set.The quality evaluation index and bio-enrichment analysis of the biclustering prove that the MOBFOB algorithm can effectively and quickly find the biclusters with significant biological significance.}
-  \end{itemize}
+    \item { MOBFOB (Multi-object Bacterial Foraging Algorithm Biclustering) based on a multi-object bacterial foraging algorithm is proposed. Because biclustering analysis can be considered as a multi-objective optimization problem, this paper improves the traditional single-object bacterial foraging algorithm based on the characteristics of biclustering analysis of gene expression data,mainly include:(1)  Determination of better solution when there is no dominant solution;(2) Sort according to the number of times they are dominated in the population; (3)Introducing externally dominant solution sets to increase diversity.This algorithm uses a multi-object bacterial foraging algorithm to simultaneously optimize the bicluster's quality evaluation indicators such as mean square residual and volume to find the dominant biclustering solution set.The quality evaluation index and bio-enrichment analysis of the biclustering prove that the MOBFOB algorithm can effectively and quickly find the biclusters with significant biological significance.}
+  \end{enumerate}
 
 
 \end{eabstract}

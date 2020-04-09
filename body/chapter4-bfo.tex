@@ -102,7 +102,7 @@
     \label{fig:mobfo_bics}
     \end{figure}
 
-    \subsection{质量验证指标}
+    \subsection{MOBFOB算法的质量评价指标的比较分析}
     图\ref{fig:mobfo_bcll}到图\ref{fig:mobfo_rat}分别是MOBFO算法在各数据集上，每次趋化操作后种群最小适应值的变化曲线。从图中可以看出，尽管在GV和CV指标上会出现明显的起伏，但是总体的趋势还是下降的。需要额外提示的是，纵坐标为GV和CV的负数，越低则容量越大。而MSR一直在稳步下降，这是因为在进行趋化操作时，对于MSR的权重是最大的，所以算法会在两个解互不支配时，牺牲一部分容量来换取MSR的下降，这也解释了GV和CV的起伏。同时，注意到算法在后期会有一定程度的发散，这是因为Levy飞行以及细菌觅食算法是具有随机性的，这有助于提高种群的多样性和跳出局部最优。
 
     \begin{figure}[htbp]
@@ -199,7 +199,7 @@
         \end{tabular}
     \end{table}
 
-    \subsection{生物验证指标}
+    \subsection{MOBFOB算法的生物评价指标的比较分析}
     为了验证MOBFOB算法能够找到具有生物意义的双聚类，本文对得到的双聚类进行了详细的GO分析，生物验证指标的平均值和标准差如表\ref{tab:mobfo_go}所示。图\ref{fig:go_bcll}给出了MOBFOB在BCLL数据集上的某个双聚类（编号1）GO分析后部分较为显著的GO项，其中包括了15个生物过程（Biological Process），10个细胞组成（Cellualr Component），15个分子功能（Molecular Function）。该双聚类由4529个基因和7个样本组成。由图\ref{fig:go_bcll}可知，该双聚类对于生物过程的富集程度要高于其他两种，其次是细胞组成，分子功能最低，而且所富集的GO项和相关的基因个数都表明了其具有一定的生物意义。  
 
     \begin{table}[htbp]
